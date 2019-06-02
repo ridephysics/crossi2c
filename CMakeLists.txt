@@ -16,6 +16,17 @@ target_include_directories(crossi2c PUBLIC
 zephyr_library_link_libraries(
     ${CROSSI2C_LIBS_COMMON}
 )
+elseif(COMMAND idf_component_register)
+set(COMPONENT_SRCS
+    esp32.c
+)
+set(COMPONENT_ADD_INCLUDEDIRS
+    ${CROSSI2C_INCS_COMMON}
+)
+set(COMPONENT_PRIV_REQUIRES
+    ${CROSSI2C_LIBS_COMMON}
+)
+register_component()
 else()
 cmake_minimum_required(VERSION 2.8)
 project(crossi2c)
