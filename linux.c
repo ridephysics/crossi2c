@@ -92,3 +92,21 @@ int crossi2c_write_read(struct crossi2c_bus *bus, uint16_t addr,
 
     return i2c_transfer(bus, msg, 2);
 }
+
+int crossi2c_burst_write(struct crossi2c_bus *bus, uint16_t addr,
+    uint8_t reg, const void *buf, size_t len)
+{
+    struct i2c_msg msg[2];
+
+    msg[0].addr = addr;
+    msg[0].flags = 0;
+    msg[0].len = 1;
+    msg[0].buf = &reg;
+
+    msg[1].addr = addr;
+    msg[1].flags = I2C_M_NOSTART | I2C_M_STOP;
+    msg[1].len = len;
+    msg[1].buf = (void*)buf;
+
+    return i2c_transfer(bus, msg, 2);
+}
