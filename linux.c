@@ -45,6 +45,7 @@ static int i2c_transfer(struct crossi2c_bus *bus, struct i2c_msg *msgs, size_t n
 
     rc = ioctl(bus->fd, I2C_RDWR, &data);
     if (rc < 0 || (size_t)rc != nmsgs) {
+        CROSSLOG_ERRNO("ioctl");
         return -1;
     }
 
