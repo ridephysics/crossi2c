@@ -13,6 +13,7 @@ int crossi2c_write(struct crossi2c_bus *bus, uint16_t addr, const void *buf, siz
 int crossi2c_write_read(struct crossi2c_bus *bus, uint16_t addr,
     const void *writebuf, size_t writelen,
     void *readbuf, size_t readlen);
+int crossi2c_burst_write(struct crossi2c_bus *bus, uint16_t addr, uint8_t reg, const void *buf, size_t len);
 
 static inline int crossi2c_read_byte(struct crossi2c_bus *bus, uint16_t addr, uint8_t reg, uint8_t *pvalue)
 {
