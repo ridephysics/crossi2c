@@ -27,4 +27,10 @@ static inline int crossi2c_write_byte(struct crossi2c_bus *bus, uint16_t addr, u
     return crossi2c_write(bus, addr, tx_buf, 2);
 }
 
+static inline int crossi2c_burst_read(struct crossi2c_bus *bus, uint16_t addr, uint8_t reg, void *buf, size_t len)
+{
+    return crossi2c_write_read(bus, addr, &reg, sizeof(reg), buf, len);
+}
+
+
 #endif /* CROSSI2C_H */
