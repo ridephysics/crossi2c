@@ -79,3 +79,25 @@ int crossi2c_write_read(struct crossi2c_bus *bus, uint16_t addr,
 
     return 0;
 }
+
+int crossi2c_burst_write(struct crossi2c_bus *bus, uint16_t addr,
+    uint8_t reg, const void *buf, size_t len)
+{
+    i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+
+    i2c_master_start(cmd);
+    i2c_master_write_byte(cmd, (addr << 1) | I2C_MASTER_WRITE, true);
+    i2c_master_write(cmd, &reg, 1, true);
+    i2c_master_write(cmd, (void*)buf, len, true);
+    i2c_master_stop(cmd);
+
+    esp_err_t ret = i2c_master_cmd_begin(bus->port, cmd, 1000 / portTICK_RATE_MS);
+    i2c_cmd_link_delete(cmd);
+
+    if (ret) {
+        CROSSLOGE("i2c_master_cmd_begin: %s(%d)", esp_err_to_name(ret), ret);
+        return -1;
+    }
+
+    return 0;
+}
